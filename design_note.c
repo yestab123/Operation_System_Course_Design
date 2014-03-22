@@ -22,6 +22,13 @@
 #define IS_READ_ONLY(x) ((x & ATTR_READ_ONLY) ? 1 : 0 )	//是只读文件就返回1，否则返回0
 #define IS_SYSTEM(x) ((x & ATTR_SYSTEM) ? 1 : 0 )		//是系统文件就返回1，否则返回0
 
+//===========
+//+FAT表数字说明
+//===========
+#define ISNULL 		0
+#define ISEND 		255
+#define ISBROKEN 	254
+
 
 
 typedef struct pointer_t{
@@ -47,7 +54,7 @@ struct openfile_s{
 
 
 
-char fat[128];	//Fat表 数字i ->  struct buffer file[i];
+char fat[128];	//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
 
 struct buffer_s{
 	char buffer[64];
@@ -55,16 +62,20 @@ struct buffer_s{
 
 struct buffer_s store[128];		//总共128个盘块
 
-struct file{
+typedef struct file_s{
 	char file_name[3];
 	char file_type[2];  		//DIR=NULL
 	unsigned int file_attr:8;	//ATTR_*
 	unsigned int start_fat:8;	//fat[start_fat]
 	unsigned int fat_count:8; 	//DIR=NULL
-	char under_file[MAX_FILE];	//拥有的文件FAT值
-};								//文件file或目录DIR属性表,保存在盘块中
+	char under_file[MAX_FILE];	//拥有的文件FAT值//
+}file_t;								//文件file或目录DIR属性表,保存在盘块中
 
 
 
 
 
+int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
+
+int find_null_fat();//查找空的FAT表项，返回对应数字
+int delete_fat(int fat_num);//删除对应的FAT表项，返回TRUE OR FALSE
