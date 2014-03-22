@@ -1,7 +1,8 @@
 //===========
 //+默认值定义
 //===========
-#define n 5 	//实验中系统允许打开文件的最大数量
+#define n 5 		//实验中系统允许打开文件的最大数量
+#define MAX_FILE 20	//每个目录最大目录项
 #define TRUE 0 	
 #define FALSE -1
 
@@ -60,6 +61,7 @@ struct file{
 	unsigned int file_attr:8;	//ATTR_*
 	unsigned int start_fat:8;	//fat[start_fat]
 	unsigned int fat_count:8; 	//DIR=NULL
+	char under_file[MAX_FILE];	//拥有的文件FAT值
 };								//文件file或目录DIR属性表,保存在盘块中
 
 
