@@ -19,3 +19,9 @@ struct {
 	OFILE file[n];
 	int length;
 }openfile;
+
+
+
+//Fat
+char fat[128];
+
