@@ -1,6 +1,7 @@
 
 #define n 5 	//实验中系统允许打开文件的最大数量
-
+#define TRUE 0 	
+#define FALSE -1
 
 
 #define ATTR_READ_ONLY 	0x01 	//只读文件
