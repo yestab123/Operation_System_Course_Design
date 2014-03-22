@@ -29,3 +29,5 @@ struct buffer{
 	char buffer[64];
 };//每个盘块内容
 struct buffer file[128];//总共128个盘块
+
+//test
