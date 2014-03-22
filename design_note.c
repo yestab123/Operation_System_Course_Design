@@ -1,13 +1,25 @@
-
+//===========
+//+默认值定义
+//===========
 #define n 5 	//实验中系统允许打开文件的最大数量
 #define TRUE 0 	
 #define FALSE -1
 
-
+//===========
+//+属性定义
+//===========
 #define ATTR_READ_ONLY 	0x01 	//只读文件
 #define ATTR_SYSTEM 	0x02 	//系统文件
 #define ATTR_FILE 		0x04 	//普通文件
 #define ATTR_DIR 		0x08 	//目录
+
+//===========
+//+宏操作
+//===========
+#define IS_DIR(x) ((x & ATTR_DIR) ? 1 : 0 )				//是目录就返回1，否则返回0
+#define IS_FILE(x) ((x & ATTR_FILE) ? 1 : 0 )			//是普通文件就返回1，否则返回0
+#define IS_READ_ONLY(x) ((x & ATTR_READ_ONLY) ? 1 : 0 )	//是只读文件就返回1，否则返回0
+#define IS_SYSTEM(x) ((x & ATTR_SYSTEM) ? 1 : 0 )		//是系统文件就返回1，否则返回0
 
 
 
