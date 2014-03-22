@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+#define n 5 //实验中系统允许打开文件的最大数量
+=======
 #define n 5 //实验中系统允许打开文件的最大数量
 
 typedef struct pointer_t{
@@ -29,3 +32,4 @@ struct buffer{
 	char buffer[64];
 };//每个盘块内容
 struct buffer file[128];//总共128个盘块
+>>>>>>> f418bfdacbfb33465c838cf1f03f34289648ad09
