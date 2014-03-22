@@ -22,6 +22,10 @@ struct {
 
 
 
-//Fat
+//Fat表 数字i ->  struct buffer file[i];
 char fat[128];
 
+struct buffer{
+	char buffer[64];
+};//每个盘块内容
+struct buffer file[128];//总共128个盘块
