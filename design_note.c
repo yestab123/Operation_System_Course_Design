@@ -3,7 +3,7 @@
 //===========
 #define n 5 		//实验中系统允许打开文件的最大数量
 #define MAX_FILE 20	//每个目录最大目录项
-#define TRUE 0 	
+#define TRUE 0
 #define FALSE -1
 
 //===========
@@ -36,7 +36,7 @@ typedef struct pointer_t{
 	int bnum; 	//磁盘盘块内第几个字节
 }pointer;
 
-typedef struct OFTLE_S{
+struct OFTLE_S{
 	char name[20]; 	//文件绝对路径名
 	char attribute; //文件的属性|用1字节表示
 	int number; 	//文件起始盘块号
@@ -44,10 +44,12 @@ typedef struct OFTLE_S{
 	int flag; 		//操作类型，用0表示以读操作方式打开文件，用1表示以写操作方式打开文件
 	pointer read; 	//读文件的位置，文件打开时dnum为文件起始盘块号，bnum为0
 	pointer write; 	// 写文件的位置，文件刚建立时dnum为文件起始盘块号，bnum为0,打开文件时dnum和bnum为文件的末尾位置
-}OFTLE;				//已打开文件表项类型
+};				//已打开文件表项类型
+
+typedef struct OFTLE_S OFTLE;
 
 struct openfile_s{
-	OFILE file[n]; 	//已打开文件登记表
+	OFTLE file[n]; 	//已打开文件登记表
 	int length; 	//已打开文件登记表中登记的文件数量
 }openfile;			//已打开文件登记表定义
 
@@ -74,6 +76,7 @@ typedef struct file_s{
 
 
 
+int init_all();
 
 int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
 
