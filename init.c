@@ -7,4 +7,5 @@ int init_all()
 		memset(store[i].buffer,'\0',strlen(store[i].buffer));
 	}
 	openfile.length=0;
+	now_dir_fat=3;
 }

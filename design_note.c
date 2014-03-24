@@ -25,9 +25,11 @@
 //===========
 //+FAT表数字说明
 //===========
-#define ISNULL 		0
-#define ISEND 		255
-#define ISBROKEN 	254
+#define FAT_NULL 		0 	//对应fAT没有内容
+#define FAT_DIR  		250	//该FAT为目录
+#define FAT_END 		255	//该FAT的内容是最后一部分
+#define FAT_BROKEN 		254	//该FAT已经损坏
+
 
 
 
@@ -44,7 +46,7 @@ struct OFTLE_S{
 	int flag; 		//操作类型，用0表示以读操作方式打开文件，用1表示以写操作方式打开文件
 	pointer read; 	//读文件的位置，文件打开时dnum为文件起始盘块号，bnum为0
 	pointer write; 	// 写文件的位置，文件刚建立时dnum为文件起始盘块号，bnum为0,打开文件时dnum和bnum为文件的末尾位置
-};				//已打开文件表项类型
+};					//已打开文件表项类型
 
 typedef struct OFTLE_S OFTLE;
 
@@ -55,8 +57,8 @@ struct openfile_s{
 
 
 
-
-char fat[128];	//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
+int now_dir_fat:8	//当前目录的FAT值；
+char fat[128];		//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
 
 struct buffer_s{
 	char buffer[64];
@@ -68,17 +70,21 @@ typedef struct file_s{
 	char file_name[3];
 	char file_type[2];  		//DIR=NULL
 	unsigned int file_attr:8;	//ATTR_*
-	unsigned int start_fat:8;	//fat[start_fat]
+	unsigned int start_fat:8;	//fat[start_fat]//文件开始FAT值
 	unsigned int fat_count:8; 	//DIR=NULL
 	char under_file[MAX_FILE];	//拥有的文件FAT值//
-}file_t;								//文件file或目录DIR属性表,保存在盘块中
+	int under_file_count;		//拥有的目录和文件的数量
+	unsigned int father_fat:8;	//所在目录的FAT值//
+}file_t;						//文件file或目录DIR属性表,保存在盘块中
 
 
 
 
-int init_all();
+int init_all();				//初始化函数
 
+file_t get_now_dir();		//获取当前目录的FILE项
+int print_file();			//列出当前目录拥有的文件和目录
 int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
 
-int find_null_fat();//查找空的FAT表项，返回对应数字
+int find_null_fat();		//查找空的FAT表项，返回对应数字
 int delete_fat(int fat_num);//删除对应的FAT表项，返回TRUE OR FALSE
