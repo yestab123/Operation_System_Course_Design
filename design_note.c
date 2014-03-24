@@ -55,16 +55,10 @@ struct openfile_s{
 	int length; 	//已打开文件登记表中登记的文件数量
 }openfile;			//已打开文件登记表定义
 
-
-
-int now_dir_fat:8	//当前目录的FAT值；
-char fat[128];		//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
-
 struct buffer_s{
 	char buffer[64];
 };	//每个盘块内容
 
-struct buffer_s store[128];		//总共128个盘块
 
 typedef struct file_s{
 	char file_name[3];
@@ -76,6 +70,14 @@ typedef struct file_s{
 	int under_file_count;		//拥有的目录和文件的数量
 	unsigned int father_fat:8;	//所在目录的FAT值//
 }file_t;						//文件file或目录DIR属性表,保存在盘块中
+
+
+//===========
+//+全局变量
+//===========
+int now_dir_fat:8	//当前目录的FAT值；
+char fat[128];		//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
+struct buffer_s store[128];		//总共128个盘块
 
 
 
