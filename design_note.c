@@ -75,7 +75,7 @@ typedef struct file_s{
 //===========
 //+全局变量
 //===========
-int now_dir_fat:8	//当前目录的FAT值；
+int now_dir_fat:8;	//当前目录的FAT值
 char fat[128];		//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
 struct buffer_s store[128];		//总共128个盘块
 
