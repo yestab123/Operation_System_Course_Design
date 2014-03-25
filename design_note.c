@@ -1,10 +1,12 @@
 //=================================
 //+默认值定义
 //=================================
-#define n 5 		//实验中系统允许打开文件的最大数量
-#define MAX_FILE 20	//每个目录最大目录项
-#define TRUE 0
-#define FALSE -1
+#define n 			5 		//实验中系统允许打开文件的最大数量
+#define MAX_FILE 	20	//每个目录最大目录项
+#define TRUE 		1
+#define FALSE 		0
+#define OK 			1
+#define FAIL 		-1
 
 //=================================
 //+属性定义
@@ -96,10 +98,12 @@ struct openfile_s openfile;		//已经打开文件登记表
 //=================================
 int init_all();				//初始化函数
 
-file_t get_fat_dir(int fat_num);
+file_t get_fat_dir(int fat_num);	//根据fat_num返回目录项
 file_t get_now_dir();		//获取当前目录的FILE项
 int print_file();			//列出当前目录拥有的文件和目录
+
 int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
+int delete_file(char * file_name)		//删除目录项
 
 int find_null_fat();		//查找空的FAT表项，返回对应数字
 int delete_fat(int fat_num);//删除对应的FAT表项，返回TRUE OR FALSE
