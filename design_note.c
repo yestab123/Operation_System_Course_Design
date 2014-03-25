@@ -73,8 +73,8 @@ struct buffer_s{
 //+目录项（文件项）信息保存结构体
 //=================================
 typedef struct file_s{
-	char file_name[3];
-	char file_type[2];  		//DIR=NULL
+	char file_name[4];
+	char file_type[3];  		//DIR=NULL
 	unsigned int file_attr:8;	//ATTR_*
 	unsigned int start_fat:8;	//fat[start_fat]//文件开始FAT值
 	unsigned int fat_count:8; 	//DIR=NULL
