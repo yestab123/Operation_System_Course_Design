@@ -96,6 +96,7 @@ struct openfile_s openfile;		//已经打开文件登记表
 //=================================
 int init_all();				//初始化函数
 
+file_t get_fat_dir(int fat_num);
 file_t get_now_dir();		//获取当前目录的FILE项
 int print_file();			//列出当前目录拥有的文件和目录
 int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
