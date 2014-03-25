@@ -3,10 +3,10 @@
 //=================================
 #define n 			5 		//实验中系统允许打开文件的最大数量
 #define MAX_FILE 	20	//每个目录最大目录项
-#define TRUE 		1
-#define FALSE 		0
-#define OK 			1
-#define FAIL 		-1
+#define TRUE 		1 	//IF判断式TRUE
+#define FALSE 		0   //IF判断是FALSE
+#define OK 			0  	//函数调用式OK
+#define FAIL 		-1 	//函数调用式失败
 #define PATH_DEEP 	6 	//路径最大深度
 
 //=================================
