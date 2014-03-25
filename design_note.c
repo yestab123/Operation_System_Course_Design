@@ -7,6 +7,7 @@
 #define FALSE 		0
 #define OK 			1
 #define FAIL 		-1
+#define PATH_DEEP 	6 	//路径最大深度
 
 //=================================
 //+属性定义
@@ -91,6 +92,14 @@ char fat[128];					//Fat表 数字i ->  struct buffer file[i];      0为空，25
 struct buffer_s store[128];		//虚拟磁盘空间，总共128个盘块
 struct openfile_s openfile;		//已经打开文件登记表
 
+//=================================
+//+当前路径记录
+//=================================
+struct now_path_s{
+	char now_fat[PATH_DEEP];//路径： /now_fat[1]/now_fat[2]/.....
+	int length;				//当前路径深度//  默认为1（即根目录 / ）
+};
+struct now_path_s now_path;
 
 
 //=================================
@@ -101,6 +110,7 @@ int init_all();				//初始化函数
 file_t get_fat_dir(int fat_num);	//根据fat_num返回目录项
 file_t get_now_dir();		//获取当前目录的FILE项
 int print_file();			//列出当前目录拥有的文件和目录
+int print_now_path();		//打印当前路径.
 
 int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
 int delete_file(char * file_name)		//删除目录项
