@@ -19,15 +19,21 @@ int find_null_fat() {
 //删除对应的FAT表项，返回TRUE OR FALSE
 int delete_fat(int fat_num) {
 	if(fat_num > FAT_LENGTH){
-		return false；
+		return FALSE；
 	} else if(fat[fat_num] == FAT_NULL) {
-		return true;
+		return TRUE;
 	} else {
 		fat[fat_num] = FAT_NULL;
 		memset(store[fat_num].buffer,'\0',strlen(store[fat_num].buffer));
-		return true;
+		return FALSE;
 	}
 }
 
-
-
+//打印当前路径.
+int print_now_path() {
+	char str;
+	for（i = 0; i < now_path.length; i++){
+		 str += get_fat_dir(now_fat[i]).file_name + "/";
+	}
+	printf("%c\n",str);
+}	
