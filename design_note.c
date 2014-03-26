@@ -111,9 +111,11 @@ file_t get_fat_dir(int fat_num);	//根据fat_num返回目录项
 file_t get_now_dir();		//获取当前目录的FILE项
 int print_file();			//列出当前目录拥有的文件和目录
 int print_now_path();		//打印当前路径.
+int cd_dir(char * file_name);   //切换到当前目录的file_name目录
+int cd_parent_dir();            //切换到父目录
 
 int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
-int delete_file(char * file_name)		//删除目录项
+int delete_file(char * file_name);		//删除目录项
 
 int find_null_fat();		//查找空的FAT表项，返回对应数字
 int delete_fat(int fat_num);//删除对应的FAT表项，返回TRUE OR FALSE
