@@ -29,7 +29,7 @@
 //+FAT表数字说明
 //=================================
 #define FAT_NULL 		0 	//对应fAT没有内容
-#define FAT_DIR  		250	//该FAT为目录
+#define FAT_DIR  		100	//该FAT为目录
 #define FAT_END 		255	//该FAT的内容是最后一部分
 #define FAT_BROKEN 		254	//该FAT已经损坏
 
