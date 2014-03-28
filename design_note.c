@@ -5,8 +5,8 @@
 #define MAX_FILE 	20	//每个目录最大目录项
 #define TRUE 		1 	//IF判断式TRUE
 #define FALSE 		0   //IF判断是FALSE
-#define OK 			0  	//函数调用式OK
-#define FAIL 		-1 	//函数调用式失败
+#define OK 			1  	//函数调用式OK    	//为防止混乱，更新为IF式判断值 2014/03/28
+#define FAIL 		0 	//函数调用式失败	//为防止混乱，更新为IF式判断值 2014/03/28
 #define PATH_DEEP 	6 	//路径最大深度
 
 //=================================
@@ -88,7 +88,7 @@ typedef struct file_s{
 //+全局变量
 //=================================
 int now_dir_fat:8;				//当前目录的FAT值
-char fat[128];					//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
+unsigned char fat[128];					//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
 struct buffer_s store[128];		//虚拟磁盘空间，总共128个盘块
 struct openfile_s openfile;		//已经打开文件登记表
 
@@ -96,7 +96,7 @@ struct openfile_s openfile;		//已经打开文件登记表
 //+当前路径记录
 //=================================
 struct now_path_s{
-	char now_fat[PATH_DEEP];//路径： /now_fat[1]/now_fat[2]/.....
+	unsigned char now_fat[PATH_DEEP];//路径： /now_fat[1]/now_fat[2]/.....
 	int length;				//当前路径深度//  默认为1（即根目录 / ）
 };
 struct now_path_s now_path;
@@ -105,17 +105,23 @@ struct now_path_s now_path;
 //=================================
 //+函数声明
 //=================================
-int init_all();				//初始化函数
+int init_all();					//初始化函数
 
-file_t get_fat_dir(int fat_num);	//根据fat_num返回目录项
-file_t get_now_dir();		//获取当前目录的FILE项
-int print_file();			//列出当前目录拥有的文件和目录
-int print_now_path();		//打印当前路径.
+file_t get_fat_dir(int fat_num);//根据fat_num返回目录项
+file_t get_now_dir();			//获取当前目录的FILE项
+
+int print_file();				//列出当前目录拥有的文件和目录
+int print_now_path();			//打印当前路径.
+
 int cd_dir(char * file_name);   //切换到当前目录的file_name目录
 int cd_parent_dir();            //切换到父目录
 
 int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
 int delete_file(char * file_name);		//删除目录项
 
-int find_null_fat();		//查找空的FAT表项，返回对应数字
-int delete_fat(int fat_num);//删除对应的FAT表项，返回TRUE OR FALSE
+int find_null_fat();			//查找空的FAT表项，返回对应数字
+int delete_fat(int fat_num);	//删除对应的FAT表项，返回TRUE OR FALSE
+
+//2014/3/28
+int dir_exist(char * dir_name);	//判断当前目录是否存在dir_name目录，存在返回TRUE，不存在返回FALSE；
+int file_exist(char * file_name);//判断当前目录是否存在file_name文件；
