@@ -107,11 +107,12 @@ struct now_path_s now_path;
 //=================================
 int init_all();					//初始化函数
 
-file_t get_fat_dir(int fat_num);//根据fat_num返回目录项
-file_t get_now_dir();			//获取当前目录的FILE项
+file_t get_fat_dir(int fat_num);//根据fat_num返回目录项	DJ *
+file_t get_now_dir();			//获取当前目录的FILE项	DJ *
 
-int print_file();				//列出当前目录拥有的文件和目录
-char * print_now_path();			//打印当前路径.//4.1修改返回字符窜
+int print_file();				//列出当前目录拥有的文件和目录	SZ
+char *  string_now_path();		//返回当前路径字符窜			SZ
+int print_now_path();			//打印当前路径					SZ
 
 int cd_dir(char * file_name);   //切换到当前目录的file_name目录
 int cd_parent_dir();            //切换到父目录
@@ -127,11 +128,11 @@ int dir_exist(char * dir_name);	//判断当前目录是否存在dir_name目录�
 int file_exist(char * file_name);//判断当前目录是否存在file_name文件；存在返回TRUE，不存在返回FALSE;
 
 //2014/4/1
-int open_file(char *file_name);//打开文件
+int open_file(char *file_name);//根据文件名打开文件         |
 int name_test(char *name);//判断名字（文件、目录）是否合法（不含特殊符号等）
 file_t get_file_from_name(char *file_name);//根据文件名在当前目录获取文件项
-int open_file_add(OFILE * file,file_t open_new,int flag);//在已经打开登记表中添加；
-int list_fd();//列出当前已经打开fd.
-int content_read(int fd);//读取fd内容
-int content_write(int fd);//写入fd内容
+int open_file_add(OFILE * file,file_t open_new,int flag);//在已经打开登记表中添加；   |
+int list_fd();//列出当前已经打开fd.            |
+int content_read(int fd);//读取fd内容          |
+int content_write(int fd);//写入fd内容	       |
 
