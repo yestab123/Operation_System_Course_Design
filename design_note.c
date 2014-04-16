@@ -1,3 +1,5 @@
+#ifndef __C_DESIGN_NOTE__
+#define __C_DESIGN_NOTE__
 //=================================
 //+默认值定义
 //=================================
@@ -136,3 +138,5 @@ int list_fd();//列出当前已经打开fd.            |
 int content_read(int fd);//读取fd内容          |
 int content_write(int fd);//写入fd内容	       |
 
+
+#endif
