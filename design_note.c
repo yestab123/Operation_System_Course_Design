@@ -119,20 +119,20 @@ int print_now_path();			//打印当前路径					SZ
 int cd_dir(char * file_name);   //切换到当前目录的file_name目录
 int cd_parent_dir();            //切换到父目录
 
-int create_file(char * file_name,char * file_type,unsigned int attr);//创建目录项,返回TRUE OR FALSE
+int create_file(char * file_name,char * file_type,unsigned char attr);//创建目录项,返回TRUE OR FALSE
 int delete_file(char * file_name);		//删除目录项
 
-int find_null_fat();			//查找空的FAT表项，返回对应数字
-int delete_fat(int fat_num);	//删除对应的FAT表项，返回TRUE OR FALSE
+int find_null_fat();			//查找空的FAT表项，返回对应数字			SZ
+int delete_fat(int fat_num);	//删除对应的FAT表项，返回TRUE OR FALSE 	SZ
 
 //2014/3/28
-int dir_exist(char * dir_name);	//判断当前目录是否存在dir_name目录，存在返回TRUE，不存在返回FALSE；
-int file_exist(char * file_name);//判断当前目录是否存在file_name文件；存在返回TRUE，不存在返回FALSE;
+int dir_exist(char * dir_name);	//判断当前目录是否存在dir_name目录，存在返回TRUE，不存在返回FALSE；  	SZ
+int file_exist(char * file_name);//判断当前目录是否存在file_name文件；存在返回TRUE，不存在返回FALSE;	SZ
 
 //2014/4/1
 int open_file(char *file_name);//根据文件名打开文件         |
-int name_test(char *name);//判断名字（文件、目录）是否合法（不含特殊符号等）
-file_t get_file_from_name(char *file_name);//根据文件名在当前目录获取文件项
+int name_test(char *name);//判断名字（文件、目录）是否合法（不含特殊符号等） 			
+file_t get_file_from_name(char *file_name);//根据文件名在当前目录获取文件项   			SZ
 int open_file_add(OFILE * file,file_t open_new,int flag);//在已经打开登记表中添加；   |
 int list_fd();//列出当前已经打开fd.            |
 int content_read(int fd);//读取fd内容          |
