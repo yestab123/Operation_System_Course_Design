@@ -5,6 +5,8 @@
 
 #include "design_note.c"
 #include "init.c"
+#include "fat.c"
+#include "dir.c"
 
 int selection(char *option,char * para)
 {
@@ -43,7 +45,7 @@ CREATE_FAIL:
 
 	else if((i=strcmp(option,"rm"))==0)
 	{
-		
+
 	}
 
 

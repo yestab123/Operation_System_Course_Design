@@ -76,7 +76,7 @@ struct buffer_s{
 //=================================
 typedef struct file_s{
 	char file_name[4];
-	char file_type[3];  		//DIR=NULL
+	char file_type[3];  		//DIR=NULL,tx
 	unsigned int file_attr:8;	//ATTR_*
 	unsigned int start_fat:8;	//fat[start_fat]//文件开始FAT值
 	unsigned int fat_count:8; 	//DIR=NULL
@@ -89,7 +89,7 @@ typedef struct file_s{
 //=================================
 //+全局变量
 //=================================
-int now_dir_fat:8;				//当前目录的FAT值
+unsigned char now_dir_fat;				//当前目录的FAT值
 unsigned char fat[128];					//Fat表 数字i ->  struct buffer file[i];      0为空，255为文件末尾，254为磁盘损坏
 struct buffer_s store[128];		//虚拟磁盘空间，总共128个盘块
 struct openfile_s openfile;		//已经打开文件登记表
@@ -130,7 +130,7 @@ int dir_exist(char * dir_name);	//判断当前目录是否存在dir_name目录�
 int file_exist(char * file_name);//判断当前目录是否存在file_name文件；存在返回TRUE，不存在返回FALSE;	SZ
 
 //2014/4/1
-int open_file(char *file_name);//根据文件名打开文件         |
+int open_file(char *file_name,int flag);//根据文件名打开文件         |
 int name_test(char *name);//判断名字（文件、目录）是否合法（不含特殊符号等） 			
 file_t get_file_from_name(char *file_name);//根据文件名在当前目录获取文件项   			SZ
 int open_file_add(OFILE * file,file_t open_new,int flag);//在已经打开登记表中添加；   |
