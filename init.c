@@ -1,3 +1,4 @@
+#include "design_note.c"
 int init_all()
 {
 	int i;
@@ -41,7 +42,7 @@ int open_file(char *file_name,int flag)
   open_new=get_file_from_name(file_name);
   open_file_add(&openfile.file[openfile.length++],open_new,flag);
 }
-  
+
 int open_file_add(OFILE *file,file_t open_new,int flag)
 {
   sprintf(file->name,"%s/%s",print_now_path(),open_new.file_name);
@@ -51,16 +52,16 @@ int open_file_add(OFILE *file,file_t open_new,int flag)
   file->flag=flag;
   file->read.dnum=file->number;
   file->read.bnum=0;
-  file->write.dnum=file->number;
-  file->write.bnum=0;
+  file->write.dnum=file->number;//edit
+  file->write.bnum=0;//edit
 }
-  
+
 int list_fd()
 {
   int i;
   for(i=0;i<openfile.length;i++)
     {
-      printf("%d %s",i,openfile.file[i].name);
+      printf("%d %s ",i,openfile.file[i].name);
       switch(openfile.file[i].flag)
 	{
 	case 0:printf("%s","r");break;
@@ -74,5 +75,31 @@ int list_fd()
 
 int content_read(int fd)
 {
-  
+
+}
+
+int content_write(int fd);
+{
+	char s;
+	int i=0;
+	char buffer[64];
+	s=getchar();
+	while(s!='#')
+	{
+		buffer[i]=s;
+		i++;
+		if(i>=64)
+			break;
+		s=getchar();
+	}
+	if(i>(64-openfile.file[fd].write.bnum))
+	{}
+	else
+	{
+		
+		memcpy(store[openfile.file[fd].write.dnum].buffer+openfile.file[fd].write.bnum,buffer,i);
+		openfile.file[fd].write.bnum+=i;
+	}
+}
+
 
