@@ -58,7 +58,7 @@ int file_exist(char * file_name) {
 	int i;
 	for( i = 0; i < f_now_dir.under_file_count; i++) {
 		file_t i_file = get_fat_dir(f_now_dir.under_file[i])
-		if(IS_FILE(i_file.file_attr) && i_file.file_name.strcmp(dir_name))
+		if(IS_FILE(i_file.file_attr) && i_file.file_name.strcmp(file_name))
 		return false;
 	}
 }
@@ -69,8 +69,45 @@ file_t get_file_from_name(char *file_name) {
 	int i;
 	for( i = 0; i < f_now_dir.under_file_count; i++) {
 		file_t i_file = get_fat_dir(f_now_dir.under_file[i])
-		if(IS_FILE(i_file.file_attr) && i_file.file_name.strcmp(dir_name))
+		if(IS_FILE(i_file.file_attr) && i_file.file_name.strcmp(file_name))
 		return i_file;
 	}
 }
-s
+
+int get_fat_from_name(char *file_name) {
+	filt_t f_now_dir = get_now_dir(); 
+	int i;
+	for( i = 0; i < f_now_dir.under_file_count; i++) {
+		file_t i_file = get_fat_dir(f_now_dir.under_file[i])
+		if(IS_FILE(i_file.file_attr) && i_file.file_name.strcmp(file_name))
+		return f_now_dir.under_file[i];
+	}
+}
+
+int delete_file(char * file_name) {
+	if (!file_exist(file_name))//判断文件是否存在
+		return false;
+	file_t ft = get_file_from_name(file_name);
+	int s_fat = ft.start_fat;
+	do{
+		int n_fat = fat[s_fat];
+		menset(store[s_fat].buffer,'\0',64);
+		fat[s_fat] = FAT_NULL;//清空文件内容所在fat表的值
+
+	}while(n_fat != FAT_END)
+	int ft_fat = get_fat_from_name(file_name);
+	menset(store[ft_fat].buffer,'\0',64);//清空目录项所在fat表值
+}
+  //切换到当前目录的file_name目录   SZ int
+int cd_dir(char * file_name) {
+	if (!dir_exist(file_name))
+		return false;
+	now_dir_fat = get_fat_from_name(file_name);
+}
+
+ 
+ //切换到父目录   
+cd_parent_dir() {
+	file_t ft = get_now_dir();
+	now_dir_fat = ft.father_fat;
+}
