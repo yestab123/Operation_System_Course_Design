@@ -33,3 +33,21 @@ int print_file()			//列出当前目录拥有的文件和目录
     }
     else printf("当前为文件！");
 }
+
+int create_file(char * file_name,char * file_type,unsigned char attr)//创建目录项,返回TRUE OR FALSE    DJ
+{
+    file_t c_file;
+    memset(&c_file,'\0',sizeof(file_t));
+    strcpy(c_file.file_name,file_name);
+    strcpy(c_file.file_type,file_type);
+    c_file.file_attr=(unsigned int)attr;
+    int i=0;
+    while(fat[i]!=0) //获取空的fat值
+    {
+        i++;
+    }
+    fat[i]=255;
+    memset(&store[i].buffer,'\0',sizeof(file_t));//清空对应的磁盘块；
+    memcpy(&store[i].buffer,&c_file,sizeof(file_t));//将新建的file复制到对应的磁盘块；
+    return 1;
+}
