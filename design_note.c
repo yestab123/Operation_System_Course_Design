@@ -48,7 +48,7 @@ typedef struct pointer_t{
 struct OFILE_S{
 	char name[20]; 	//文件绝对路径名
 	unsigned char attribute; //文件的属性|用1字节表示
-        int number:8; 	//文件起始盘块号
+    int number:8; 	//文件起始盘块号
 	int length; 	//文件长度，文件占用的字节数
 	int flag; 		//操作类型，用0表示以读操作方式打开文件，用1表示以写操作方式打开文件
 	pointer read; 	//读文件的位置，文件打开时dnum为文件起始盘块号，bnum为0
@@ -109,7 +109,7 @@ struct now_path_s now_path;
 //=================================
 int init_all();					//初始化函数
 
-file_t get_fat_dir(int fat_num);//根据fat_num返回目录项	DJ *
+file_t get_fat_dir(unsigned char fat_num);//根据fat_num返回目录项	DJ *
 file_t get_now_dir();			//获取当前目录的FILE项	DJ *
 
 int print_file();				//列出当前目录拥有的文件和目录	SZ *
@@ -122,8 +122,8 @@ int cd_parent_dir();            //切换到父目录                    SZ
 int create_file(char * file_name,char * file_type,unsigned char attr);//创建目录项,返回TRUE OR FALSE    DJ
 int delete_file(char * file_name);		//删除目录项                     SZ
 
-int find_null_fat();			//查找空的FAT表项，返回对应数字			SZ
-int delete_fat(int fat_num);	//删除对应的FAT表项，返回TRUE OR FALSE 	SZ
+unsigned char find_null_fat();			//查找空的FAT表项，返回对应数字			SZ
+int delete_fat(unsigned char fat_num);	//删除对应的FAT表项，返回TRUE OR FALSE 	SZ
 
 //2014/3/28
 int dir_exist(char * dir_name);	//判断当前目录是否存在dir_name目录，存在返回TRUE，不存在返回FALSE；  	SZ *
