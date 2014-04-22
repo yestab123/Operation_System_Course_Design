@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
+#include <windows.h>
+#include <conio.h>
 
 #include "design_note.c"
 #include "init.c"
