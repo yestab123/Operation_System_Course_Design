@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 
-#include "design_note.c"
+#include "design_note.h"
 #include "init.c"
 #include "fat.c"
 #include "dir.c"
@@ -30,9 +30,9 @@ int selection(char *option,char * para)
 	{
 		if((i=strlen(para))!=0 && i<=4)
 		{
-			if(name_test(para) && !file_exist(para))
+			if(name_test(para) && file_exist(para))
 			{
-				create_file(para,"tx",ATTR_FILE)
+				create_file(para,"tx",ATTR_FILE);
 			}
 			else
 				goto CREATE_FAIL;

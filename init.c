@@ -1,6 +1,6 @@
-#include "design_note.c"
 int init_all()
 {
+
 	int i;
 
 //=================================
@@ -119,7 +119,7 @@ int content_read(int fd)
 
 }
 
-int content_write(int fd);
+int content_write(int fd)
 {
 	char s;
 	int i=0;
@@ -167,7 +167,7 @@ int content_write(int fd);
 	}
 	else
 	{
-		
+
 		memcpy(store[openfile.file[fd].write.dnum].buffer+openfile.file[fd].write.bnum,buffer,i);
 		openfile.file[fd].write.bnum+=i;
 	}

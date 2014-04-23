@@ -1,4 +1,4 @@
-file_t get_fat_dir(int fat_num)
+file_t get_fat_dir(unsigned char fat_num)
 {
     file_t fat_dir;
     memset(&fat_dir,'\0',sizeof(file_t));

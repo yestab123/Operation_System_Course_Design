@@ -1,4 +1,4 @@
-#ifndef __C_DESIGN_NOTE__
+
 #define __C_DESIGN_NOTE__
 //=================================
 //+默认值定义
@@ -131,13 +131,12 @@ int file_exist(char * file_name);//判断当前目录是否存在file_name文件
 
 //2014/4/1
 int open_file(char *file_name,int flag);//根据文件名打开文件         |
-int name_test(char *name);//判断名字（文件、目录）是否合法（不含特殊符号等） 			
+int name_test(char *name);//判断名字（文件、目录）是否合法（不含特殊符号等）            DJ*
 file_t get_file_from_name(char *file_name);//根据文件名在当前目录获取文件项   			SZ *
-int get_fat_from_name(char *file_name)//根据文件名从当前目录获取fat值		SZ *
+int get_fat_from_name(char *file_name);//根据文件名从当前目录获取fat值		SZ *
 int open_file_add(OFILE * file,file_t open_new,int flag);//在已经打开登记表中添加；   |
 int list_fd();//列出当前已经打开fd.            |
 int content_read(int fd);//读取fd内容          |
 int content_write(int fd);//写入fd内容	       |
 
 
-#endif
