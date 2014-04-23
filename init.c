@@ -21,14 +21,19 @@ int init_all()
 	{
 		now_path.now_fat[i]=FAT_NULL;
 	}
+	for(i=0;i<5;i++)
+	{
+		openfile.file[i].working=0;
+	}
 	now_path.now_fat[0]=2;
 	now_path.length=1;
+	init_printf();
 }
 
 int open_file(char *file_name,int flag)
 {
   int i,j;
-  if(openfile.length<=n)
+  if(openfile.length>=n)
     {
       return FAIL;
     }
@@ -40,18 +45,29 @@ int open_file(char *file_name,int flag)
     }
   file_t open_new;
   open_new=get_file_from_name(file_name);
-  open_file_add(&openfile.file[openfile.length++],open_new,flag);
+  if(no_open_test(open_new.file_fat)==FAIL)
+  {
+  	return FAIL;
+  }
+  i=find_null_openfile();
+  if(i==-1)
+  {
+  	return FAIL;
+  }
+  //printf("%s",open_new.file_name);
+  return open_file_add(&openfile.file[i],open_new,flag);
 }
 
 int open_file_add(OFILE *file,file_t open_new,int flag)
 {
-  sprintf(file->name,"%s/%s",print_now_path(),open_new.file_name);
+  sprintf(file->name,"%s/%s",/*print_now_path()*/"abc",open_new.file_name);
   file->attribute=(unsigned)open_new.file_attr;
-
-  file->number=fat[open_new.start_fat];
+  file->working=1;
+  file->number=open_new.start_fat;
+  file->file_fat=open_new.file_fat;
   //解决flag问题
   file->flag=flag;
-    if(fat[open_new.start_fat]==255)//文件没有内容
+    if(open_new.start_fat==0)//文件没有内容
   {
   	 file->write.dnum=-1;
   	 file->read.dnum=-1;
@@ -63,27 +79,19 @@ int open_file_add(OFILE *file,file_t open_new,int flag)
 	}
   file->read.bnum=0;
   file->write.bnum=0;//edit
+
+  openfile.length++;
+  return TRUE;
 }
 
-int list_fd()
-{
-  int i;
-  for(i=0;i<openfile.length;i++)
-    {
-      printf("%d %s ",i,openfile.file[i].name);
-      switch(openfile.file[i].flag)
-	{
-	case 0:printf("%s","r");break;
-	case 1:printf("%s","w");break;
-	case 3:printf("%s","rw");break;
-	}
-      printf("\n");
-    }
-}
 
 
 int content_read(int fd)
 {
+	if(openfile.file[fd].flag!=OPEN_READ)
+	{
+		return FAIL;
+	}
 	if(openfile.file[fd].read.dnum==-1)
 	{
 		printf("\n#END#\n");
@@ -112,6 +120,7 @@ int content_read(int fd)
 	}
 	else
 	{
+		openfile.file[fd].read.dnum=-1;
 		printf("\n#END#\n");
 		return FAIL;
 	}
@@ -119,12 +128,33 @@ int content_read(int fd)
 
 }
 
-int content_write(int fd)
+int content_write(int fd)//覆盖模式
 {
+	if(openfile.file[fd].flag!=OPEN_WRITE)
+	{
+		return FAIL;
+	}
 	char s;
 	int i=0;
 	int count;
 	char buffer[300];
+	if(openfile.file[fd].write.dnum==-1)
+	{
+		int t=find_null_fat();
+		if(t>128)
+		{
+			return FAIL;
+		}
+		openfile.file[fd].write.dnum=t;
+		openfile.file[fd].write.bnum=0;
+		openfile.file[fd].number=t;
+		fat[openfile.file[fd].file_fat]=t;
+		fat[t]=255;
+		file_t temp;
+		memcpy(&temp,store[openfile.file[fd].file_fat].buffer,sizeof(file_t));
+		temp.start_fat=t;
+		memcpy(store[openfile.file[fd].file_fat].buffer,&temp,sizeof(file_t));
+	}
 	s=getchar();
 	while(s!='#')
 	{
@@ -142,7 +172,7 @@ int content_write(int fd)
 		while(i>0)
 		{
 			unsigned char fat_t=find_null_fat();
-			if(fat_t==FAIL)
+			if(fat_t>=200)
 			{
 				return FAIL;
 			}
@@ -177,4 +207,33 @@ int content_write(int fd)
 	}
 }
 
+int add_write(int fd)//追加模式
+{
+	int fat_num;
+	if(openfile.file[fd].write.dnum==-1)
+	{
+		content_write(fd);
+	}
+	else
+	{
+		fat_num=openfile.file[fd].write.dnum;
+		while(fat[fat_num]!=255)
+		{
+			fat_num=fat[fat_num];
+		}
+		openfile.file[fd].write.dnum=fat_num;
+		char buffer[64];
+		memcpy(buffer,store[fat_num].buffer,64);
+		char c=buffer[0];
+		int i=0;
+		while(c!='#')
+		{
+			i++;
+			c=buffer[i];
+		}
+		if(i>=64)
+	}
+
+
+}
 

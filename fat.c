@@ -8,6 +8,7 @@ unsigned char find_null_fat() {
 			return i;
 		}
 	}
+	return 200;
 }
 
 
@@ -52,9 +53,9 @@ int dir_exist(char * dir_name) {
 	for( i = 0; i < f_now_dir.under_file_count; i++) {
 		file_t i_file = get_fat_dir(f_now_dir.under_file[i]);
 		if(IS_DIR(i_file.file_attr) && strcmp(dir_name,i_file.file_name)==0)
-		return FAIL;
+		return TRUE;
 	}
-	return TRUE;
+	return FAIL;
 }
 
 //判断当前目录是否存在file_name文件；存在返回TRUE，不存在返回FALSE
@@ -64,9 +65,9 @@ int file_exist(char * file_name) {
 	for( i = 0; i < f_now_dir.under_file_count; i++) {
 		file_t i_file = get_fat_dir(f_now_dir.under_file[i]);
 		if(IS_FILE(i_file.file_attr) && strcmp(file_name,i_file.file_name)==0)
-		return FAIL;
+		return TRUE;
 	}
-	return TRUE;
+	return FAIL;
 }
 
 //根据文件名在当前目录获取文件项

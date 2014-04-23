@@ -1,4 +1,4 @@
-#include "design_note.c"
+
 HANDLE Handlea;//句柄声明
 COORD setCOORD;//定位结构体
 
@@ -23,17 +23,17 @@ void printf_fat()
 		for(j=0;j<32;j++)
 		{
 			if(fat[k]==0)//NULL
-				SetConsoleTextAttribute(setHandleaa, FOREGROUND_RED |FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+				SetConsoleTextAttribute(Handlea, FOREGROUND_GREEN|FOREGROUND_INTENSITY);
 			else if(fat[k]==250)//DIR
-				SetConsoleTextAttribute(setHandleaa, FOREGROUND_RED |FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+				SetConsoleTextAttribute(Handlea, FOREGROUND_RED |FOREGROUND_GREEN|FOREGROUND_INTENSITY);
 			else if(fat[k]==254)//BROKEN
-				SetConsoleTextAttribute(setHandleaa, FOREGROUND_RED |FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+				SetConsoleTextAttribute(Handlea, FOREGROUND_RED |FOREGROUND_INTENSITY);
 			else
-				SetConsoleTextAttribute(setHandleaa, FOREGROUND_RED |FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+				SetConsoleTextAttribute(Handlea, FOREGROUND_BLUE|FOREGROUND_INTENSITY);
 			printf("#");
 			k++;
 		}
 		printf("\n");
 	}
-	SetConsoleTextAttribute(setHandleaa, 0x0F);
+	SetConsoleTextAttribute(Handlea, 0x0F);
 }

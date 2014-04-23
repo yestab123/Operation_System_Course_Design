@@ -19,6 +19,9 @@
 #define ATTR_FILE 		0x04 	//普通文件
 #define ATTR_DIR 		0x08 	//目录
 
+#define OPEN_READ       0
+#define OPEN_WRITE      1
+
 //=================================
 //+宏操作
 //=================================
@@ -46,9 +49,11 @@ typedef struct pointer_t{
 }pointer;
 
 struct OFILE_S{
+	int working;    //0为没有使用，1为使用中。
 	char name[20]; 	//文件绝对路径名
 	unsigned char attribute; //文件的属性|用1字节表示
-    int number:8; 	//文件起始盘块号
+	unsigned int file_fat:8;    //目录项，文件项的存放FAT值。
+    unsigned int number:8; 	//文件起始盘块号
 	int length; 	//文件长度，文件占用的字节数
 	int flag; 		//操作类型，用0表示以读操作方式打开文件，用1表示以写操作方式打开文件
 	pointer read; 	//读文件的位置，文件打开时dnum为文件起始盘块号，bnum为0
@@ -58,7 +63,7 @@ struct OFILE_S{
 typedef struct OFILE_S OFILE;
 
 struct openfile_s{
-	OFILE file[n]; 	//已打开文件登记表
+	OFILE file[5]; 	//已打开文件登记表
 	int length; 	//已打开文件登记表中登记的文件数量
 };			//已打开文件登记表定义
 
@@ -80,6 +85,7 @@ typedef struct file_s{
 	unsigned int file_attr:8;	//ATTR_*
 	unsigned int start_fat:8;	//fat[start_fat]//文件开始FAT值
 	unsigned int fat_count:8; 	//DIR=NULL
+	unsigned int file_fat:8;    //目录项，文件项的存放FAT值。
 	char under_file[MAX_FILE];	//拥有的文件FAT值//
 	int under_file_count;		//拥有的目录和文件的数量
 	unsigned int father_fat:8;	//所在目录的FAT值//

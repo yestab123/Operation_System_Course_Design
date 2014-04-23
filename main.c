@@ -6,6 +6,8 @@
 #include <conio.h>
 
 #include "design_note.h"
+#include "printf.c"
+#include "openfile.c"
 #include "init.c"
 #include "fat.c"
 #include "dir.c"
@@ -30,9 +32,13 @@ int selection(char *option,char * para)
 	{
 		if((i=strlen(para))!=0 && i<=4)
 		{
-			if(name_test(para) && file_exist(para))
+			if(name_test(para) && !file_exist(para))
 			{
-				create_file(para,"tx",ATTR_FILE);
+				i=create_file(para,"tx",ATTR_FILE);
+				if(i==FAIL)
+				{
+					printf("OutOfSize\n");
+				}
 			}
 			else
 				goto CREATE_FAIL;
@@ -50,17 +56,92 @@ CREATE_FAIL:
 
 	}
 
+	else if((i=strcmp(option,"ls"))==0)
+	{
+	    print_file();
+	}
+    else if((i=strcmp(option,"open"))==0)
+    {
+        int st;
+        printf("EnterOpenMode(r/w):");
+        char c[10];
+        scanf("%s",c);
+        if(strcmp(c,"r")==0)
+        {
+	        st=open_file(para,OPEN_READ);
+    	}
+    	else if(strcmp(c,"w")==0)
+    		{
+    			st=open_file(para,OPEN_WRITE);
+    		}
+    	else
+    	{
+    		printf("WRONG ENTER\n");
+    		return FAIL;
+    	}
+        if(st==FAIL)
+        {
+            printf("OPEN %s ERROR\n",para);
+        }
+    }
+    else if((i=strcmp(option,"list"))==0)
+    {
+        list_fd();
+    }
+    else if((i==strcmp(option,"read"))==0)
+    {
+        int fd;
+        printf("EnterFileFD:");
+        scanf("%d",&fd);
+        if(fd_test(fd)==FAIL)
+        {
+            printf("None FD\n");
+            return FAIL;
+        }
+        content_read(fd);
+    }
+    else if((i==strcmp(option,"write"))==0)
+    {
+    	int fd;
+    	printf("EnterFileFD:");
+    	scanf("%d",&fd);
+    	if(fd_test(fd)==FAIL)
+    	{
+    		printf("None FD\n");
+    		return FAIL;
+    	}
+    	content_write(fd);
+    }
+    else if((i==strcmp(option,"close"))==0)
+    {
+        int fd;
+    	printf("EnterFileFD:");
+    	scanf("%d",&fd);
+    	if(fd_test(fd)==FAIL)
+    	{
+    		printf("None FD\n");
+    		return FAIL;
+    	}
+    	openfile_close(fd);
 
+    }
+    else if((i==strcmp(option,"status"))==0)
+    {
+        printf_fat();
+        return TRUE;
+    }
 
 }
 
 
 int main(int argc ,char **argv)
 {
+
 	char option[10];
 	char para[10];
 	int Running=1;
 	init_all();
+	SetConsoleTextAttribute(Handlea, 0x0F);
 	while(Running)
 	{
 		memset(option,'\0',strlen(option));
@@ -68,7 +149,7 @@ int main(int argc ,char **argv)
 		printf("#");
 		print_now_path();
 		printf(":");
-		scanf("%s %s",option,para);
+		scanf("%s",option);
 		selection(option,para);
 //		printf("%s %s\n",option,para);
 	}
