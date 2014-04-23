@@ -70,3 +70,44 @@ int no_open_test(unsigned char fat_num)
 	}
 	return TRUE;
 }
+
+int cut_write_init(int fd)
+{
+	if(openfile.file[fd].write.dnum==-1)
+	{
+		return TRUE;
+	}
+	int i,j;
+	i=openfile.file[fd].number;
+	j=i;
+	while(fat[i]!=255)
+	{
+		i=fat[i];
+		fat[i]=0;
+		memset(store[i].buffer,'\0',64);
+	}
+	fat[j]=255;
+	openfile.file[fd].length=0;
+	openfile.file[fd].write.bnum=0;
+}
+
+int add_write_init(int fd)
+{
+	if(openfile.file[fd].write.dnum==-1)
+	{
+		return TRUE;
+	}
+	int i=openfile.file[fd].number;
+	while(fat[i]!=255)
+	{
+		i=fat[i];
+	}
+	openfile.file[fd].write.dnum=i;
+	int count=openfile.file[fd].length;
+	while(count>64)
+	{
+		count-=64;
+	}
+	openfile.file[fd].write.bnum=count;
+
+}

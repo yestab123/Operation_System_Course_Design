@@ -56,6 +56,7 @@ struct OFILE_S{
     unsigned int number:8; 	//文件起始盘块号
 	int length; 	//文件长度，文件占用的字节数
 	int flag; 		//操作类型，用0表示以读操作方式打开文件，用1表示以写操作方式打开文件
+	int read_length; //已经读取的长度
 	pointer read; 	//读文件的位置，文件打开时dnum为文件起始盘块号，bnum为0
 	pointer write; 	// 写文件的位置，文件刚建立时dnum为文件起始盘块号，bnum为0,打开文件时dnum和bnum为文件的末尾位置
 };					//已打开文件表项类型
@@ -89,6 +90,7 @@ typedef struct file_s{
 	char under_file[MAX_FILE];	//拥有的文件FAT值//
 	int under_file_count;		//拥有的目录和文件的数量
 	unsigned int father_fat:8;	//所在目录的FAT值//
+	int length;
 }file_t;						//文件file或目录DIR属性表,保存在盘块中
 
 
