@@ -51,3 +51,15 @@ int create_file(char * file_name,char * file_type,unsigned char attr)//´´½¨Ä¿Â¼Ï
     memcpy(&store[i].buffer,&c_file,sizeof(file_t));//½«ÐÂ½¨µÄfile¸´ÖÆµ½¶ÔÓ¦µÄ´ÅÅÌ¿é£»
     return 1;
 }
+
+int name_test(char *name)//ÅÐ¶ÏÃû×Ö£¨ÎÄ¼þ¡¢Ä¿Â¼£©ÊÇ·ñºÏ·¨£¨²»º¬ÌØÊâ·ûºÅµÈ£©
+{
+    int i;
+    if(strlen(name)>3) return 0;
+    for(i=0;i<strlen(name);i++)
+    {
+        if(!((name[i]>='0'&&name[i]<='9')||(name[i]>='A'&&name[i]<='Z')||(name[i]>='a'&&name[i]<='b')||(name[i]=='_')))
+            return 0;
+    }
+    return 1;
+}
