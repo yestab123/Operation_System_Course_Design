@@ -8,6 +8,7 @@
 #include "design_note.h"
 #include "option.c"
 #include "printf.c"
+#include "file.c"
 #include "openfile.c"
 #include "init.c"
 #include "fat.c"
@@ -218,6 +219,7 @@ CREATE_FAIL:
 
     else if((i=strncmp(option,"exit",4))==0)
     {
+    	save_file();
     	exit(0);
     }
 

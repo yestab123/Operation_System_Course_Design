@@ -14,6 +14,15 @@ int init_all()
 	openfile.length=0;	//打开文件初始化
 	now_dir_fat=2;		//当前目录的FAT值，默认为根目录/ 即为fat=2;
 
+	file_t temp;
+	temp.file_name[0]='/';
+	temp.file_name[1]='\0';
+	temp.file_fat=2;
+	fat[2]=255;
+	temp.under_file_count=0;
+	temp.father_fat=2;
+	temp.length=0;
+	memcpy(store[2].buffer,&temp,sizeof(file_t));
 //=================================
 //+当前路径记录初始化，默认/为当前路径（根目录）
 //=================================
@@ -27,7 +36,10 @@ int init_all()
 	}
 	now_path.now_fat[0]=2;
 	now_path.length=1;
+	fat[0]=255;
+	fat[1]=255;
 	init_printf();
+	read_file();
 }
 
 int open_file(char *file_name,int flag,int cover)

@@ -40,6 +40,7 @@ int create_file(char * file_name,char * file_type,unsigned char attr)//´´½¨Ä¿Â¼Ï
     c_file.file_attr=(unsigned int)attr;
     c_file.start_fat=0;
     c_file.fat_count=0;
+    c_file.length=0;
     c_file.father_fat=now_dir_fat;
     unsigned char i=find_null_fat();
     if(i>128)
