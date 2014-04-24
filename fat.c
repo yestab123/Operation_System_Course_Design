@@ -82,12 +82,32 @@ file_t get_file_from_name(char *file_name) {
 	}
 }
 
+file_t get_dir_file_from_name(char *file_name) {
+	file_t f_now_dir = get_now_dir();
+	int i;
+	for( i = 0; i < f_now_dir.under_file_count; i++) {
+		file_t i_file = get_fat_dir(f_now_dir.under_file[i]);
+		if(IS_DIR(i_file.file_attr) && strcmp(file_name,i_file.file_name)==0)
+		return i_file;
+	}
+}
+
 int get_fat_from_name(char *file_name) {
 	file_t f_now_dir = get_now_dir();
 	int i;
 	for( i = 0; i < f_now_dir.under_file_count; i++) {
 		file_t i_file = get_fat_dir(f_now_dir.under_file[i]);
-		if(IS_FILE(i_file.file_attr) && !strcmp(file_name,i_file.file_name)!=0)
+		if(IS_FILE(i_file.file_attr) && strcmp(file_name,i_file.file_name)==0)
+		return f_now_dir.under_file[i];
+	}
+}
+
+int get_dir_fat_from_name(char *file_name) {
+	file_t f_now_dir = get_now_dir();
+	int i;
+	for( i = 0; i < f_now_dir.under_file_count; i++) {
+		file_t i_file = get_fat_dir(f_now_dir.under_file[i]);
+		if(IS_DIR(i_file.file_attr) && strcmp(file_name,i_file.file_name)==0)
 		return f_now_dir.under_file[i];
 	}
 }
@@ -109,9 +129,18 @@ int delete_file(char * file_name) {
 }
   //切换到当前目录的file_name目录   SZ int
 int cd_dir(char * file_name) {
-	if (!dir_exist(file_name))
+	if (dir_exist(file_name)==FAIL)
 		return FAIL;
-	now_dir_fat = get_fat_from_name(file_name);
+	now_dir_fat = get_dir_fat_from_name(file_name);
+	if(now_path.length>=6)
+	{
+		return FAIL;
+	}
+//	unsigned char t=now_path.length;
+//	printf("%d",(int)t);
+//	now_path.now_fat[t]=now_dir_fat;
+//	now_path.length+=1;
+	return OK;
 }
 
 
@@ -119,4 +148,29 @@ int cd_dir(char * file_name) {
 int cd_parent_dir() {
 	file_t ft = get_now_dir();
 	now_dir_fat = ft.father_fat;
+}
+
+int path_string()
+{
+	memset(temp_path,'\0',50);
+	sprintf(temp_path,"/");
+	if(now_dir_fat==2)
+	{
+		return OK;
+	}
+	unsigned char mark;
+	mark=now_dir_fat;
+	while(1)
+	{
+		char te[50];
+		strcpy(te,temp_path);
+		file_t temp_a=get_fat_dir(mark);
+		sprintf(temp_path,"%s%s",temp_a.file_name,te);
+		mark=temp_a.father_fat;
+		if(mark==2)
+		{
+			break;
+		}
+	}
+	return OK;
 }

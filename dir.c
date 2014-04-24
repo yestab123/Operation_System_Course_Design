@@ -25,8 +25,16 @@ int print_file()			//列出当前目录拥有的文件和目录
         {
             file_t fileDIR=get_fat_dir(dir.under_file[i]);
             printf("%s ",fileDIR.file_name);
+            if(IS_DIR(fileDIR.file_attr))
+            {
+            	printf("DIR");
+            }
+            else
+            {
+            	printf("%d FILE",fileDIR.length);
+            }
+            printf("\n");
         }
-        printf("\n");
     }
 
 }
@@ -67,4 +75,45 @@ int name_test(char *name)//判断名字（文件、目录）是否合法（不含特殊符号等）
             return 0;
     }*/
     return OK;
+}
+
+int create_dir(char *dir_name)
+{
+	if(strlen(dir_name)>3)
+	{
+		return FAIL;
+	}
+	if(name_test(dir_name)==FAIL)
+	{
+		return FAIL;
+	}
+	if(dir_exist(dir_name)==TRUE)
+	{
+		return FAIL;
+	}
+	int i;
+	i=find_null_fat();
+	if(i>200)
+	{
+		return FAIL;
+	}
+	file_t temp=get_now_dir();
+	if(temp.under_file_count>=MAX_FILE)
+	{
+		return FAIL;
+	}
+	file_t dir_temp;
+	strcpy(dir_temp.file_name,dir_name);
+	dir_temp.file_attr=ATTR_DIR;
+	dir_temp.start_fat=0;
+	dir_temp.file_fat=i;
+	fat[i]=255;
+	dir_temp.under_file_count=0;
+	dir_temp.father_fat=now_dir_fat;
+	temp.under_file[temp.under_file_count++]=i;
+	dir_temp.length=0;
+	memcpy(store[now_dir_fat].buffer,&temp,sizeof(file_t));
+	memcpy(store[i].buffer,&dir_temp,sizeof(file_t));
+	return OK;
+
 }

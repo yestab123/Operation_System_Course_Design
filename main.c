@@ -25,9 +25,18 @@ int selection()
 			printf("usage:cd [DIR_NAME]\n");
 			return FAIL;
 		}
+		if((i=strcmp(para,".."))==0)
+		{
+			cd_parent_dir();
+			return OK;
+		}
 		if((i=dir_exist(para))==TRUE)
 		{
-			cd_dir(para);
+			int j=cd_dir(para);
+			if(j==FAIL)
+			{
+				printf("cd Dir error\n");
+			}
 			return OK;
 		}
 		else
@@ -35,6 +44,25 @@ int selection()
 			printf("Dir doesn't exist.\n");
 			return FAIL;
 		}
+	}
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+
+	else if((i=strncmp(option,"mkdir",5))==0)
+	{
+		if(para==NULL)
+		{
+			printf("usage:mkdir [DIR_NAME]\n");
+			return FAIL;
+		}
+		int t=create_dir(para);
+		if(t==FAIL)
+		{
+			printf("create dir fail\n");
+			return FAIL;
+		}
+		return OK;
 	}
 //=================================
 //+++++++++++++++++++++++++++++++++
@@ -234,12 +262,14 @@ int main(int argc ,char **argv)
 	SetConsoleTextAttribute(Handlea, 0x0F);
 	while(Running)
 	{
+		save_file();
 		memset(string,'\0',sizeof(string));
 		option=NULL;
 		para=NULL;
 		third=NULL;
 		printf("#");
-		print_now_path();
+		path_string();
+		printf("%s",temp_path);
 		printf(":");
 		gets(string);
 		option_init(string);

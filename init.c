@@ -22,6 +22,7 @@ int init_all()
 	temp.under_file_count=0;
 	temp.father_fat=2;
 	temp.length=0;
+	temp.file_attr=ATTR_DIR;
 	memcpy(store[2].buffer,&temp,sizeof(file_t));
 //=================================
 //+当前路径记录初始化，默认/为当前路径（根目录）

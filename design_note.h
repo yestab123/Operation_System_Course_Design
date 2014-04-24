@@ -84,12 +84,12 @@ typedef struct file_s{
 	char file_name[4];
 	char file_type[3];  		//DIR=NULL,tx
 	unsigned int file_attr:8;	//ATTR_*
-	unsigned int start_fat:8;	//fat[start_fat]//文件开始FAT值
+	unsigned char start_fat;	//fat[start_fat]//文件开始FAT值
 	unsigned int fat_count:8; 	//DIR=NULL
-	unsigned int file_fat:8;    //目录项，文件项的存放FAT值。
+	unsigned char file_fat;    //目录项，文件项的存放FAT值。
 	char under_file[MAX_FILE];	//拥有的文件FAT值//
 	int under_file_count;		//拥有的目录和文件的数量
-	unsigned int father_fat:8;	//所在目录的FAT值//
+	unsigned char father_fat;	//所在目录的FAT值//
 	int length;
 }file_t;						//文件file或目录DIR属性表,保存在盘块中
 
@@ -110,10 +110,11 @@ char *third;   //第三选项
 //+当前路径记录
 //=================================
 struct now_path_s{
-	unsigned char now_fat[PATH_DEEP];//路径： /now_fat[1]/now_fat[2]/.....
+	unsigned char now_fat[6];//路径： /now_fat[1]/now_fat[2]/.....
 	int length;				//当前路径深度//  默认为1（即根目录 / ）
 };
 struct now_path_s now_path;
+char temp_path[50];
 
 
 //=================================
@@ -152,3 +153,25 @@ int content_read(int fd);//读取fd内容          |
 int content_write(int fd);//写入fd内容	       |
 
 
+//=================================
+//*切换目录: 	cd [目录名]  //当目录名为 .. 的时候，切换到父目录
+//*创建文件：	create [文件名]
+//*创建目录：	mkdir [目录名]
+//*打开文件： 	open [文件名] [模式] //模式为r w c ，三选一，r:只读，w:只写，c:只写（覆盖以前写的内容）
+//*文件号： 	list //（打开的文件会获得一个数字，在操作read和write的时候需要使用此数字来操作） list （显示对应的文件号）
+//*读文件： 	read [文件号] [读取大小（整数）]  //文件号参见上行，读取文件到文件尾的时候需要关闭文件才能重新读取头部。
+//*写文件： 	write [文件号]  //执行后可以不断输入内容，直到输入“ # ” 来结束内容，#并不保存
+//*关闭文件：   close [文件号] //文件需要关闭之后才能用其他模式打开
+//*显示当前文件目录： ls    //显示当前文件的文件、目录
+//*##所有目录和文件的创建都只会创建在当前目录
+//*系统磁盘状态： status
+//*
+//*
+//*
+//*
+//*
+//*
+//*
+//*
+//*
+//=================================
