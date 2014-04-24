@@ -6,17 +6,24 @@
 #include <conio.h>
 
 #include "design_note.h"
+#include "option.c"
 #include "printf.c"
 #include "openfile.c"
 #include "init.c"
 #include "fat.c"
 #include "dir.c"
 
-int selection(char *option,char * para)
+int selection()
 {
 	int i;
-	if((i=strcmp(option,"cd"))==0)
+	i=strncmp(option,"cd",2);
+	if(i==0)
 	{
+		if(para==NULL)
+		{
+			printf("usage:cd [DIR_NAME]\n");
+			return FAIL;
+		}
 		if((i=dir_exist(para))==TRUE)
 		{
 			cd_dir(para);
@@ -24,12 +31,20 @@ int selection(char *option,char * para)
 		}
 		else
 		{
-			printf("dir doesn't exist!!\n");
+			printf("Dir doesn't exist.\n");
 			return FAIL;
 		}
 	}
-	else if((i=strcmp(option,"create"))==0)
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+	else if((i=strncmp(option,"create",6))==0)
 	{
+		if(para==NULL)
+		{
+			printf("usage:create [FILE_NAME]\n");
+			return FAIL;
+		}
 		if((i=strlen(para))!=0 && i<=4)
 		{
 			if(name_test(para) && !file_exist(para))
@@ -50,85 +65,160 @@ CREATE_FAIL:
 			return FAIL;
 		}
 	}
-
-	else if((i=strcmp(option,"rm"))==0)
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+	else if((i=strncmp(option,"rm",2))==0)
 	{
 
 	}
-
-	else if((i=strcmp(option,"ls"))==0)
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+	else if((i=strncmp(option,"ls",2))==0)
 	{
 	    print_file();
 	}
-    else if((i=strcmp(option,"open"))==0)
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strncmp(option,"open",4))==0)
     {
-        int st;
-        printf("EnterOpenMode(r/w):");
-        char c[10];
-        scanf("%s",c);
-        if(strcmp(c,"r")==0)
-        {
-	        st=open_file(para,OPEN_READ);
-    	}
-    	else if(strcmp(c,"w")==0)
-    		{
-    			st=open_file(para,OPEN_WRITE);
-    		}
-    	else
+    	if(para==NULL)
     	{
-    		printf("WRONG ENTER\n");
+    		printf("usage:open [file_name] [mode(r/w/c)]\n");
     		return FAIL;
     	}
+
+    	option_second(para);
+
+    	if(third==NULL)
+    	{
+    		printf("usage:open [file_name] [mode(r/w/c)]\n");
+    		return FAIL;
+    	}
+        int st;
+
+        if(strcmp(third,"r")==0)
+        {
+	        st=open_file(para,OPEN_READ,0);
+    	}
+    	else if(strcmp(third,"w")==0)
+    	{
+    		st=open_file(para,OPEN_WRITE,0);
+    	}
+    	else if(strcmp(third,"c")==0)
+    	{
+    		st=open_file(para,OPEN_WRITE,1);
+    	}
+    	else
+    	{
+    		printf("MODE WRONG\n");
+    		return FAIL;
+    	}
+
         if(st==FAIL)
         {
             printf("OPEN %s ERROR\n",para);
         }
     }
-    else if((i=strcmp(option,"list"))==0)
+
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strncmp(option,"list",4))==0)
     {
         list_fd();
     }
-    else if((i==strcmp(option,"read"))==0)
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strncmp(option,"read",4))==0)
     {
-        int fd;
-        printf("EnterFileFD:");
-        scanf("%d",&fd);
-        if(fd_test(fd)==FAIL)
-        {
-            printf("None FD\n");
-            return FAIL;
-        }
-        content_read(fd);
-    }
-    else if((i==strcmp(option,"write"))==0)
-    {
-    	int fd;
-    	printf("EnterFileFD:");
-    	scanf("%d",&fd);
-    	if(fd_test(fd)==FAIL)
+    	if(para==NULL)
     	{
-    		printf("None FD\n");
+    		printf("usage:read [file_FD] [read_size]\n");
     		return FAIL;
     	}
-    	content_write(fd);
+    	option_second(para);
+    	if(third==NULL)
+    	{
+    		printf("usage:read [file_FD] [read_size]\n");
+    		return FAIL;
+    	}
+    	int fd=atoi(para);
+    	int size=atoi(third);
+    	int t=TRUE;
+        if(fd_test(fd)==FAIL)
+        {
+            printf("WRONG FD\n");
+            return FAIL;
+        }
+   		while(size>0)
+   		{
+        	t=read_byte(fd);
+        	if(t==FAIL)
+        	{
+        		break;
+        	}
+      		size--;
+   		}
+   		if(size>0)
+   		{
+   			printf("#END#\n");
+   		}
     }
-    else if((i==strcmp(option,"close"))==0)
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strncmp(option,"write",5))==0)
     {
-        int fd;
-    	printf("EnterFileFD:");
-    	scanf("%d",&fd);
+    	if(para==NULL)
+    	{
+    		printf("usage:write [file_FD] |End with #\n");
+    		return FAIL;
+    	}
+    	int fd=atoi(para);
+    	int t=TRUE;
+        if(fd_test(fd)==FAIL)
+        {
+            printf("WRONG FD\n");
+            return FAIL;
+        }
+
+        t=write_byte(fd);
+
+    }
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strncmp(option,"close",5))==0)
+    {
+    	if(para==NULL)
+    	{
+    		printf("usage:close [file_FD]\n");
+    		return FAIL;
+    	}
+    	int fd=atoi(para);
     	if(fd_test(fd)==FAIL)
     	{
-    		printf("None FD\n");
+    		printf("WRONG FD\n");
     		return FAIL;
     	}
     	openfile_close(fd);
-
     }
-    else if((i==strcmp(option,"status"))==0)
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strncmp(option,"status",6))==0)
     {
         printf_fat();
         return TRUE;
+    }
+
+    else if((i=strncmp(option,"exit",4))==0)
+    {
+    	exit(0);
     }
 
 }
@@ -137,20 +227,21 @@ CREATE_FAIL:
 int main(int argc ,char **argv)
 {
 
-	char option[10];
-	char para[10];
 	int Running=1;
 	init_all();
 	SetConsoleTextAttribute(Handlea, 0x0F);
 	while(Running)
 	{
-		memset(option,'\0',strlen(option));
-		memset(para,'\0',strlen(para));
+		memset(string,'\0',sizeof(string));
+		option=NULL;
+		para=NULL;
+		third=NULL;
 		printf("#");
 		print_now_path();
 		printf(":");
-		scanf("%s",option);
-		selection(option,para);
+		gets(string);
+		option_init(string);
+		selection();
 //		printf("%s %s\n",option,para);
 	}
 }

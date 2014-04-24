@@ -26,7 +26,8 @@ int delete_fat(unsigned char fat_num) {
 }
 //返回当前路径字符窜
 char *  string_now_path(){
-	char str[50];
+	char *str;
+	str=(char *)malloc(sizeof(char)*50);
 	int i;
 	for(i = 0;i < now_path.length; i++){
 	    sprintf(str,"%s/",get_fat_dir(now_path.now_fat[i]).file_name);

@@ -30,7 +30,7 @@ int init_all()
 	init_printf();
 }
 
-int open_file(char *file_name,int flag)
+int open_file(char *file_name,int flag,int cover)
 {
   int i,j;
   if(openfile.length>=n)
@@ -55,10 +55,10 @@ int open_file(char *file_name,int flag)
   	return FAIL;
   }
   //printf("%s",open_new.file_name);
-  return open_file_add(&openfile.file[i],open_new,flag);
+  return open_file_add(&openfile.file[i],open_new,flag,i,cover);
 }
 
-int open_file_add(OFILE *file,file_t open_new,int flag)
+int open_file_add(OFILE *file,file_t open_new,int flag,int fd,int cover)
 {
   sprintf(file->name,"%s/%s",/*print_now_path()*/"abc",open_new.file_name);
   file->attribute=(unsigned)open_new.file_attr;
@@ -67,6 +67,8 @@ int open_file_add(OFILE *file,file_t open_new,int flag)
   file->file_fat=open_new.file_fat;
   //解决flag问题
   file->flag=flag;
+  file->length=open_new.length;
+  file->read_length=0;
     if(open_new.start_fat==0)//文件没有内容
   {
   	 file->write.dnum=-1;
@@ -79,7 +81,17 @@ int open_file_add(OFILE *file,file_t open_new,int flag)
 	}
   file->read.bnum=0;
   file->write.bnum=0;//edit
-
+  if(flag==OPEN_WRITE)
+  {
+	  if(cover==1)
+	  {
+	  	cut_write_init(fd);
+	  }
+	  else
+	  {
+	  	add_write_init(fd);
+	  }
+	}
   openfile.length++;
   return TRUE;
 }
@@ -232,8 +244,95 @@ int add_write(int fd)//追加模式
 			c=buffer[i];
 		}
 		if(i>=64)
+        {
+
+        }
 	}
 
 
 }
 
+
+
+
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+int write_byte(int fd)
+{
+	if(openfile.file[fd].flag!=OPEN_WRITE)
+	{
+		return FAIL;
+	}
+	if(openfile.file[fd].write.dnum==-1)
+	{
+		int t=find_null_fat();
+		if(t>128)
+		{
+			return FAIL;
+		}
+		openfile.file[fd].number=t;
+		openfile.file[fd].write.dnum=t;
+		openfile.file[fd].write.bnum=0;
+		fat[t]=255;
+		openfile_update(fd,1);
+	}
+	char c;
+	while((c=getchar())!='#')
+	{
+		if(openfile.file[fd].write.bnum>=64)
+		{
+			int t=find_null_fat();
+			if(t>128)
+			{
+				return FAIL;
+			}
+			fat[openfile.file[fd].write.dnum]=t;
+			openfile.file[fd].write.dnum=t;
+			openfile.file[fd].write.bnum=0;
+			fat[t]=255;
+		}
+		memcpy(&store[openfile.file[fd].write.dnum]\
+			.buffer[openfile.file[fd].write.bnum],&c,1);
+		openfile.file[fd].write.bnum++;
+		openfile.file[fd].length++;
+	}
+	openfile_update(fd,0);
+	getchar();
+	return OK;
+}
+
+int read_byte(int fd)
+{
+	if(openfile.file[fd].flag!=OPEN_READ)
+	{
+		return FAIL;
+	}
+	if(openfile.file[fd].read.dnum==-1)
+	{
+		return FAIL;
+	}
+	if(openfile.file[fd].read_length>=openfile.file[fd].length)
+	{
+		return FAIL;
+	}
+	if(openfile.file[fd].read.bnum>=64)
+	{
+		if(fat[openfile.file[fd].read.dnum]==255)
+		{
+			return FAIL;
+		}
+		else
+		{
+			openfile.file[fd].read.dnum=fat[openfile.file[fd].read.dnum];
+			openfile.file[fd].read.bnum=0;
+		}
+	}
+	char c;
+	memcpy(&c,&store[openfile.file[fd].read.dnum].\
+		buffer[openfile.file[fd].read.bnum],1);
+	openfile.file[fd].read.bnum++;
+	openfile.file[fd].read_length++;
+	printf("%c",c);
+	return TRUE;
+}
