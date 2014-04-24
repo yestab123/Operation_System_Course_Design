@@ -13,6 +13,7 @@
 #include "init.c"
 #include "fat.c"
 #include "dir.c"
+#include "delete.c"
 
 int selection()
 {
@@ -63,6 +64,31 @@ int selection()
 			return FAIL;
 		}
 		return OK;
+	}
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+	else if((i=strncmp(option,"rm",2))==0)
+	{
+		if(para==NULL)
+		{
+			printf("usage:rm [FILE_NAME]\n");
+			return FAIL;
+		}
+		else
+		{
+			int t=delete_file(para);
+			if(t==FAIL)
+			{
+				printf("delete file fail\n");
+				return FAIL;
+			}
+			else
+			{
+				printf("delete %s success\n",para);
+				return FAIL;
+			}
+		}
 	}
 //=================================
 //+++++++++++++++++++++++++++++++++

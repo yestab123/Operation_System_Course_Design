@@ -36,12 +36,21 @@ int print_file()			//ÁÐ³öµ±Ç°Ä¿Â¼ÓµÓÐµÄÎÄ¼þºÍÄ¿Â¼
             printf("\n");
         }
     }
+    else
+    {
+    	printf("\n");
+    }
 
 }
 
 int create_file(char * file_name,char * file_type,unsigned char attr)//´´½¨Ä¿Â¼Ïî,·µ»ØTRUE OR FALSE    DJ
 {
     file_t c_file;
+    file_t dir_file=get_now_dir();
+    if(dir_file.under_file_count>MAX_FILE)
+    {
+    	return FAIL;
+    }
     memset(&c_file,'\0',sizeof(file_t));
     strcpy(c_file.file_name,file_name);
     strcpy(c_file.file_type,file_type);
@@ -59,7 +68,6 @@ int create_file(char * file_name,char * file_type,unsigned char attr)//´´½¨Ä¿Â¼Ï
     c_file.file_fat=i;
     memset(store[i].buffer,'\0',64);//Çå¿Õ¶ÔÓ¦µÄ´ÅÅÌ¿é£»
     memcpy(store[i].buffer,&c_file,sizeof(file_t));//½«ÐÂ½¨µÄfile¸´ÖÆµ½¶ÔÓ¦µÄ´ÅÅÌ¿é£»
-    file_t dir_file=get_now_dir();
     dir_file.under_file[dir_file.under_file_count++]=i;
     memcpy(store[now_dir_fat].buffer,&dir_file,sizeof(file_t));
     return OK;

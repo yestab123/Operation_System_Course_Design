@@ -111,7 +111,7 @@ int get_dir_fat_from_name(char *file_name) {
 		return f_now_dir.under_file[i];
 	}
 }
-
+/*
 int delete_file(char * file_name) {
 	if (!file_exist(file_name))//判断文件是否存在
 		return FAIL;
@@ -126,7 +126,7 @@ int delete_file(char * file_name) {
 	}while(n_fat != FAT_END);
 	int ft_fat = get_fat_from_name(file_name);
 	memset(store[ft_fat].buffer,'\0',64);//清空目录项所在fat表值
-}
+}*/
   //切换到当前目录的file_name目录   SZ int
 int cd_dir(char * file_name) {
 	if (dir_exist(file_name)==FAIL)
@@ -156,6 +156,7 @@ int path_string()
 	sprintf(temp_path,"/");
 	if(now_dir_fat==2)
 	{
+
 		return OK;
 	}
 	unsigned char mark;
@@ -165,7 +166,7 @@ int path_string()
 		char te[50];
 		strcpy(te,temp_path);
 		file_t temp_a=get_fat_dir(mark);
-		sprintf(temp_path,"%s%s",temp_a.file_name,te);
+		sprintf(temp_path,"/%s%s",temp_a.file_name,te);
 		mark=temp_a.father_fat;
 		if(mark==2)
 		{

@@ -73,7 +73,8 @@ int open_file(char *file_name,int flag,int cover)
 
 int open_file_add(OFILE *file,file_t open_new,int flag,int fd,int cover)
 {
-  sprintf(file->name,"%s/%s",/*print_now_path()*/"abc",open_new.file_name);
+	path_string();
+  sprintf(file->name,"%s%s",temp_path,open_new.file_name);
   file->attribute=(unsigned)open_new.file_attr;
   file->working=1;
   file->number=open_new.start_fat;
