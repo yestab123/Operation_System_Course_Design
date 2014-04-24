@@ -87,6 +87,22 @@ int no_open_test(unsigned char fat_num)
 	return TRUE;
 }
 
+int get_fd(unsigned char fat_num)
+{
+    int i;
+	for(i=0;i<5;i++)
+	{
+		if(openfile.file[i].working==1)
+		{
+			if(openfile.file[i].file_fat==fat_num)
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+
 int cut_write_init(int fd)
 {
 	if(openfile.file[fd].write.dnum==-1)

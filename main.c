@@ -68,7 +68,7 @@ int selection()
 //=================================
 //+++++++++++++++++++++++++++++++++
 //=================================
-	else if((i=strncmp(option,"rm",2))==0)
+	else if((i=strcmp(option,"rm"))==0)
 	{
 		if(para==NULL)
 		{
@@ -93,6 +93,27 @@ int selection()
 //=================================
 //+++++++++++++++++++++++++++++++++
 //=================================
+	else if((i=strncmp(option,"rmdir",5))==0)
+	{
+		if(para==NULL)
+		{
+			printf("usage:rmdir [DIR_NAME]\n");
+			return FAIL;
+		}
+		else
+		{
+			if(dir_exist(para)!=TRUE)
+			{
+				printf("dir not exist\n");
+				return FAIL;
+			}
+			int mark=get_dir_fat_from_name(para);
+			delete_dir(mark);
+		}
+	}
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
 	else if((i=strncmp(option,"create",6))==0)
 	{
 		if(para==NULL)
@@ -100,7 +121,7 @@ int selection()
 			printf("usage:create [FILE_NAME]\n");
 			return FAIL;
 		}
-		if((i=strlen(para))!=0 && i<=4)
+		if(strlen(para)<4)
 		{
 			if(name_test(para) && !file_exist(para))
 			{
