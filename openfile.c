@@ -56,19 +56,23 @@ int fd_test(int fd)
 int list_fd()
 {
   int i;
+  printf("+--------------------------+\n");
+  printf("|FD\tPATH\t\tMODE\t\n");
+  printf("+--------------------------+\n");
   for(i=0;i<5;i++)
     {
     	if(openfile.file[i].working==1){
-    	  printf("%d %s ",i,openfile.file[i].name);
+    	  printf("| %d\t%s\t\t",i,openfile.file[i].name);
 	      switch(openfile.file[i].flag)
 			{
-			case 0:printf("%s","r");break;
-			case 1:printf("%s","w");break;
-			case 3:printf("%s","rw");break;
+			case 0:printf("%s\t","r");break;
+			case 1:printf("%s\t","w");break;
+			case 3:printf("%s\t","rw");break;
 			}
    		   printf("\n");
 		    }
 	}
+	printf("+--------------------------+\n");
 }
 
 int no_open_test(unsigned char fat_num)

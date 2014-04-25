@@ -110,7 +110,7 @@ int open_file_add(OFILE *file,file_t open_new,int flag,int fd,int cover)
   return TRUE;
 }
 
-
+/*
 
 int content_read(int fd)
 {
@@ -266,7 +266,7 @@ int add_write(int fd)//追加模式
 
 }
 
-
+*/
 
 
 //=================================
@@ -349,4 +349,52 @@ int read_byte(int fd)
 	openfile.file[fd].read_length++;
 	printf("%c",c);
 	return TRUE;
+}
+
+int read_all(char * file_name)
+{
+	if(file_exist(file_name)!=TRUE)
+	{
+		return FAIL;
+	}
+	file_t temp=get_file_from_name(file_name);
+	if(temp.length==0)
+	{
+		return OK;
+	}
+	int read_length=0;
+	int single=0;
+	int fat_num=temp.start_fat;
+	while(read_length<temp.length)
+	{
+		char c;
+		memcpy(&c,&store[fat_num].buffer[single++],1);
+		printf("%c",c);
+		read_length++;
+		if(single>=64)
+		{
+			if(fat_num==255)
+			{
+				break;
+			}
+			fat_num=fat[fat_num];
+			single=0;
+		}
+	}
+	printf("\n");
+	return OK;
+}
+
+int broken(int fat_num)
+{
+	if(fat_num>128||fat_num<0)
+	{
+		return FAIL;
+	}
+	if(fat[fat_num]==0)
+	{
+		fat[fat_num]=254;
+		return OK;
+	}
+	return FAIL;
 }

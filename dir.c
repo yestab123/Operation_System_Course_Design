@@ -17,6 +17,9 @@ file_t get_now_dir()		//获取当前目录的FILE项
 int print_file()			//列出当前目录拥有的文件和目录
 {
     file_t dir=get_now_dir();
+    printf("+-----------------------+\n");
+    printf("|NAME\tSIZE\tTYPE\t|\n");
+    printf("+-----------------------+\n");
     if(dir.under_file_count>0)
     {
         int i=0;
@@ -24,17 +27,18 @@ int print_file()			//列出当前目录拥有的文件和目录
         for(i=0;i<dir.under_file_count;i++)
         {
             file_t fileDIR=get_fat_dir(dir.under_file[i]);
-            printf("%s ",fileDIR.file_name);
+            printf("|  %s\t",fileDIR.file_name);
             if(IS_DIR(fileDIR.file_attr))
             {
-            	printf("DIR");
+            	printf("\tDIR\t|");
             }
             else
             {
-            	printf("%d FILE",fileDIR.length);
+            	printf("%d\tFILE\t|",fileDIR.length);
             }
             printf("\n");
         }
+        printf("+-----------------------+\n");
     }
     else
     {

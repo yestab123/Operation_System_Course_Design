@@ -268,6 +268,49 @@ CREATE_FAIL:
 //=================================
 //+++++++++++++++++++++++++++++++++
 //=================================
+    else if((i=strcmp(option,"break"))==0)
+    {
+    	if(para==NULL)
+    	{
+    		printf("usage:break [FAT_NUM]\n");
+    		return FAIL;
+    	}
+    	int fd=atoi(para);
+    	int t=broken(fd);
+    	if(t==FAIL)
+    	{
+    		printf("FAIL\n");
+    		return FAIL;
+    	}
+    	else
+    	{
+    		printf("DONE\n");
+    		return FAIL;
+    	}
+    }
+
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strcmp(option,"cat"))==0)
+    {
+    	if(para==NULL)
+    	{
+    		printf("usage:cat [FILE_NAME] \n");
+    		return FAIL;
+    	}
+        int t=read_all(para);
+        if(t==FAIL)
+        {
+        	printf("cat file error\n");
+        	return FAIL;
+        }
+        return OK;
+
+    }
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
     else if((i=strncmp(option,"close",5))==0)
     {
     	if(para==NULL)
@@ -309,6 +352,7 @@ int main(int argc ,char **argv)
 	SetConsoleTextAttribute(Handlea, 0x0F);
 	while(Running)
 	{
+		printf_fat_all();
 		save_file();
 		memset(string,'\0',sizeof(string));
 		option=NULL;
