@@ -18,6 +18,7 @@
 int selection()
 {
 	int i;
+	unsigned char kt;
 	i=strncmp(option,"cd",2);
 	if(i==0)
 	{
@@ -39,6 +40,10 @@ int selection()
 				printf("cd Dir error\n");
 			}
 			return OK;
+		}
+		else if((kt=find_dir_fat_from_name(para))!=254)
+		{
+			now_dir_fat=kt;
 		}
 		else
 		{
@@ -144,14 +149,11 @@ CREATE_FAIL:
 //=================================
 //+++++++++++++++++++++++++++++++++
 //=================================
-	else if((i=strncmp(option,"rm",2))==0)
-	{
 
-	}
 //=================================
 //+++++++++++++++++++++++++++++++++
 //=================================
-	else if((i=strncmp(option,"ls",2))==0)
+	else if((i=strcmp(option,"ls"))==0)
 	{
 	    print_file();
 	}
@@ -341,7 +343,30 @@ CREATE_FAIL:
     	exit(0);
     }
 
+
+//=================================
+//+++++++++++++++++++++++++++++++++
+//=================================
+    else if((i=strncmp(option,"clean",6))==0)
+    {
+        system("cls");
+        setXY(0,0);
+        return TRUE;
+    }
+    else if((i=strcmp(option,"\r"))==0)
+    {
+    	return FAIL;
+    }
+    else
+    {
+    	printf("ERROR COMMAND#\n");
+    	return FAIL;
+    }
 }
+
+    
+
+
 
 
 int main(int argc ,char **argv)

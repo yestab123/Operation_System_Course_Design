@@ -119,7 +119,7 @@ int create_dir(char *dir_name)
 	dir_temp.file_attr=ATTR_DIR;
 	dir_temp.start_fat=0;
 	dir_temp.file_fat=i;
-	fat[i]=255;
+	fat[i]=FAT_DIR;
 	dir_temp.under_file_count=0;
 	dir_temp.father_fat=now_dir_fat;
 	temp.under_file[temp.under_file_count++]=i;

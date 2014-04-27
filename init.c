@@ -18,7 +18,7 @@ int init_all()
 	temp.file_name[0]='/';
 	temp.file_name[1]='\0';
 	temp.file_fat=2;
-	fat[2]=255;
+	fat[2]=FAT_DIR;
 	temp.under_file_count=0;
 	temp.father_fat=2;
 	temp.length=0;
